@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next Stage - Game Discovery</title>
+    <link rel="stylesheet" href="static/styles/estilo.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="nav-left">
+                <a href="#">Jogos</a>
+                <a href="#search-section">Buscar</a>
+            </div>
+            <div class="logo">
+                <img src="static/assets/logo_play.png" alt="Logo">
+            </div>
+            <div class="nav-right">
+                <a href="#" class="nav-btn">Entrar</a>
+                <a href="#" class="nav-btn primary">Cadastrar</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="controller-left">
+            <img src="/static/assets/controle_preto_esquerda.png" alt="">
+        </div>
+        <div class="controller-right">
+            <img src="static/assets/controlepretodireita.png" alt="">
+        </div>
+        
+        <div class="hero-content">
+            <h1>NEXT STAGE</h1>
+            <p>Pesquise, descubra e encontre seu próximo jogo favorito<br>de forma rápida e fácil.</p>
+        </div>
+
+        <!-- Featured Games Showcase -->
+        <div class="featured-games">
+            <img src="static/assets/jogos.png" alt="Featured Games" class="featured-image">
+        </div>
+    </section>
+
+    <!-- Games Section -->
+    <section class="games-section">
+        <h2 class="section-title">JOGOS</h2>
+        
+        <!-- DUO Section -->
+        <div class="category-section">
+            <h3 class="category-title">DUO</h3>
+            <p class="category-description">Divirta-se em dupla! Jogos feitos para cooperação, estratégia e vitória lado a lado.</p>
+            
+            <div class="games-row">
+                <div class="game-card">
+                    <img src="static/assets/ittakes.png" alt="It Takes Two">
+                    <div class="game-rating">
+                        <span class="game-name">It takes two</span>
+                        <div class="stars">★★★★★</div>
+                    </div>
+                </div>
+                <div class="game-card">
+                    <img src="static/assets/unravel.png" alt="Unravel Two">
+                    <div class="game-rating">
+                        <span class="game-name">Unravel two</span>
+                        <div class="stars">★★★★☆</div>
+                    </div>
+                </div>
+                <div class="game-card">
+                    <img src="static/assets/overcooked.png" alt="Overcooked 2">
+                    <div class="game-rating">
+                        <span class="game-name">Overcooked 2</span>
+                        <div class="stars">★★★★☆</div>
+                    </div>
+                </div>
+                <div class="game-card">
+                    <img src="static/assets/peak.png" alt="Peak">
+                    <div class="game-rating">
+                        <span class="game-name">Peak</span>
+                        <div class="stars">★★★★☆</div>
+                    </div>
+                </div>
+                <div class="controller-decoration right"></div>
+            </div>
+        </div>
+
+        <!-- CASUAL Section -->
+        <div class="category-section">
+            <h3 class="category-title">CASUAL</h3>
+            <p class="category-description2">Leves, rápidos e divertidos. Perfeitos para jogar sem pressa e relaxar.</p>
+            
+            <div class="games-row">
+                <div class="controller-decoration left"></div>
+                <div class="game-card">
+                    <img src="static/assets/dave.png" alt="Dave the Diver">
+                    <div class="game-rating">
+                    <span class="game-name">Peak</span>
+                        <div class="stars">★★★★☆</div>
+                    </div>
+                
+                </div>
+                <div class="game-card">
+                    <img src="static/assets/2k25.png" alt="NBA 2K25">
+                    <div class="game-rating">
+                    <span class="game-name">Peak</span>
+                        <div class="stars">★★★★☆</div>
+                    </div>
+                </div>
+                <div class="game-card">
+                    <img src="static/assets/overcooked.png" alt="Overcooked 2">
+                    <div class="game-rating">
+                    <span class="game-name">Peak</span>
+                        <div class="stars">★★★★☆</div>
+                    </div>
+                </div>
+                <div class="game-card">
+                    <img src="static/assets/stardew.png" alt="Stardew Valley">
+                    <div class="game-rating">
+                    <span class="game-name">Peak</span>
+                        <div class="stars">★★★★☆</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section class="search-section" id="search-section">
+        <h2 class="search-title">A BUSCA CERTA PARA O JOGO PERFEITO</h2>
+        <p class="search-subtitle">NEXT STAGE</p>
+        
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Buscar jogo...">
+            <button onclick="buscarJogosFromInput()">Buscar</button>
+        </div>
+        
+        <div class="game-grid" id="gameGrid"></div>
+    </section>
+
+   
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Next Stage. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        const API_KEY = "13f913dc39564d77b3df3fc14ecbfc9d";
+        const BASE_URL = "https://api.gamebrain.co/v1/games";
+
+        async function buscarJogos(query = "zelda") {
+            const grid = document.getElementById("gameGrid");
+            grid.innerHTML = "<p class='loading'>Carregando...</p>";
+
+            try {
+                const res = await fetch(`${BASE_URL}?query=${query}&limit=6`, {
+                    headers: { "Authorization": `Bearer ${API_KEY}` }
+                });
+
+                const data = await res.json();
+                console.log(data);
+
+                grid.innerHTML = "";
+                const jogos = data.results || data;
+
+                jogos.forEach(game => {
+                    const card = document.createElement("div");
+                    card.classList.add("game-card");
+
+                    card.innerHTML = `
+                        <img src="${game.cover_url || 'https://via.placeholder.com/200x250?text=No+Image'}" alt="${game.name}">
+                        <div class="game-info">
+                            <div class="game-title">${game.name}</div>
+                            <div class="game-score">⭐ ${game.gbs || 'N/A'}</div>
+                        </div>
+                    `;
+
+                    grid.appendChild(card);
+                });
+
+            } catch (err) {
+                grid.innerHTML = "<p class='error'>Erro ao carregar jogos 😢</p>";
+                console.error(err);
+            }
+        }
+
+        buscarJogos();
+
+        function buscarJogosFromInput() {
+            const query = document.getElementById("searchInput").value || "zelda";
+            buscarJogos(query);
+        }
+    </script>
+</body>
+</html>
